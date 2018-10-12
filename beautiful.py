@@ -12,7 +12,7 @@ def spider(max_pages):
         plain_text = source.text
         obj = BeautifulSoup(plain_text, "html5lib")
         # not the ideal way of getting links as these will get the link available in the webpage
-        for link in obj.find_all('a'):
+        for link in obj.find_all('TV'):
             # just getting all the links
             print(link.get('href'))
         page += 1
