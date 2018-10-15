@@ -8,5 +8,6 @@ db = client['pricetracker']
 #set the db to TV collection
 collection = db['TV']
 #result = collection.find()
-for str in collection.find({}):
-	print(str['url'])
+for doc in collection.find({}):
+	# changed variable names
+	print(doc['url'])
