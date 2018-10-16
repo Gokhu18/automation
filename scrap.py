@@ -31,9 +31,9 @@ for doc in collection.find({}):
 		except TypeError:
 			print ("Some error in finding the price\t") + str(time.ctime())
 			pass
-			wb.write_to_sheet('price.xlsx')
+			wb.save('price.xlsx')
 		else:
-			print ("Some problem here at row: ") +str(row) + str(time.ctime())
+			print ("Some problem here at db: ") +str(row) + str(time.ctime())
 	print ("Data Scraped from url: ")+val
 driver.quit()
 print ("Completed") 
