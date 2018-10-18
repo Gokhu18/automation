@@ -42,3 +42,9 @@ wb.save('price.xlsx')
 driver.quit()
 print ("Completed") 
 print (time.ctime())
+
+# use None
+# if result == None:
+# 	pass
+# else:
+# 	fetch url and get the result
