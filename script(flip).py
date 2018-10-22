@@ -34,10 +34,8 @@ def main():
 			driver.get(result)
 			price = (driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[3 or 4]/div[1]/div/div[1]').text)
 			inser(bar,model,price)
-
 if __name__ == '__main__':
 	main()
-
 driver.quit()
 print(time.ctime())
 print("Completed")
