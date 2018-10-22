@@ -4,9 +4,9 @@ import xlrd, re, pymongo
 from pymongo import MongoClient
 
 def upload(brand, model, size, smart,url):
-	client = MongoClient('127.0.0.1',27017)
-	db = client['price_tracker']
-	collection = db['tv']
+	client = MongoClient('localhost',27017)
+	db = client['pricetracker']
+	collection = db['TV']
 	doc = ({"brand":brand,"model":model,"size":size,"smart":smart,"url":url})
 	collection.insert(doc)
 
@@ -21,18 +21,17 @@ def read(fn):
 		size = (worksheet.cell(val,2).value)
 		smart = (worksheet.cell(val,3).value)
 		url  = (worksheet.cell(val,4).value)
-        print(brand)
-        print(model)
-        print(size)
-        print(smart)
-        print(url)
-
-		# upload(brand, model, size, smart,url)
+		print(brand)
+		print(model)
+		print(size)
+		print(smart)
+		print(url)
+		upload(brand, model, size, smart,url)
 	# print("Program upload complete")
 
 def main():
 	# enter the name of the sheet
-	fn = 'C:\\Users\sauravkhandelwal\Desktop\Scraper\LinksSAP.xlsx'
+	fn = 'C:\\Users/sauravkhandelwal/Documents/GitHub/links.xlsx'
 	# calling the read functin responsible
 	read(fn)
 
