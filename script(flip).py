@@ -12,15 +12,16 @@ collection = db['TV']
 #calling the webdriver
 driver = webdriver.Chrome()
 #initializing different db
-db1 = client['price2']
+db1 = client['price']
 col = db1['TV']
 dt = datetime.datetime.now().date()
-
 #inserting the values into db
 def inser(bar,model,price):
 	doc = ({'brand':bar,'model':model,str(dt):price})
-	col.insert_one(doc)
-	db1.col.update_one({}, {"$set": {str(dt): price}},upsert = False)
+	if(doc == None):
+		col.insert_one(doc)
+	else:
+		db1.TV.update_one({'model':model}, {"$set": {str(dt):price}},upsert = True)
 	print("Insert Complete")
 #defining main function
 def main():
@@ -37,9 +38,7 @@ def main():
 			driver.get(result)
 			price = (driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[3 or 4]/div[1]/div/div[1]').text)
 			inser(bar,model,price)
-
 if __name__ == '__main__':
 	main()
-
 driver.quit()
 print("Completed")
