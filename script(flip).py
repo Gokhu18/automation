@@ -2,6 +2,8 @@ import selenium
 from selenium import webdriver
 import pymongo,datetime
 from pymongo import MongoClient
+from log_controller import *
+log_info("Selecting collection")
 
 #connect to database
 client = MongoClient('localhost',27017)
@@ -12,16 +14,18 @@ collection = db['TV']
 #calling the webdriver
 driver = webdriver.Chrome()
 #initializing different db
-db1 = client['price']
-col = db1['TV']
+conn = MongoClient('10.56.133.12',27017)
+db1 = conn['pricetracker']
+col = db1['pricetracker']
 dt = datetime.datetime.now().date()
+
 #inserting the values into db
 def inser(bar,model,price):
-	doc = ({'brand':bar,'model':model,str(dt):price})
-	if(doc == None):
-		col.insert_one(doc)
+	doc1 = ({'brand':bar,'model':model,str(dt):price})
+	if(doc1 == None):
+		col.insert_one(doc1)
 	else:
-		db1.TV.update_one({'model':model}, {"$set": {str(dt):price}},upsert = True)
+		db1.pricetracker.update_one({'model':model}, {"$set": {str(dt):price}},upsert = True)
 	print("Insert Complete")
 #defining main function
 def main():
@@ -38,7 +42,9 @@ def main():
 			driver.get(result)
 			price = (driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[3 or 4]/div[1]/div/div[1]').text)
 			inser(bar,model,price)
+
 if __name__ == '__main__':
 	main()
+
 driver.quit()
 print("Completed")
