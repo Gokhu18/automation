@@ -1,6 +1,6 @@
 import selenium
 from selenium import webdriver
-import pymongo,datetime
+import pymongo,datetime,re
 from pymongo import MongoClient
 from log_controller import *
 log_info("Selecting collection")
@@ -29,7 +29,7 @@ dt = datetime.datetime.now().date()
 def inser(bar,model,price):
 	logger.info('Handling insertion')
 	doc1 = ({'brand':bar,'model':model,str(dt):price})
-	logger.info('Storing in doc1 %s',doc1)
+	logger.debug('storing: %s',list(doc1))
 	if(doc1 == None):
 		logger.info('No documents found')
 		col.insert_one(doc1)
@@ -42,7 +42,7 @@ def inser(bar,model,price):
 #defining main function
 def main():
 	for doc in collection.find({}):
-		logger.debug('%s doc',doc)
+		logger.debug('%s')
 		# storing the url
 		result = doc['url']
 		logger.info('parsing the Url into variable result')
@@ -58,8 +58,9 @@ def main():
 		else:
 			driver.get(result)
 			logger.info('Iterating the webpages')
-			price = (driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[3 or 4]/div[1]/div/div[1]').text)
-			logger.debug('fetching price %s'price,)
+			price = str((driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[3 or 4]/div[1]/div/div[1]')).text)
+			price = price.replace('Price: Not Available','0')
+			logger.debug('fetching price %s',price)
 			logger.info('getting the price through xpaths')
 			inser(bar,model,price)
 			logger.info('Calling the inser Function')
