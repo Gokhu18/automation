@@ -70,6 +70,7 @@ def main():
 				review = review.replace(' ','')
 				logger.info('fetching No. of Ratings and Reviews %s',rating,review)
 			except NoSuchElementException:
+				logger.error("No review found in main loop", exc_info=True)
 				pass
 				print("No element found")
 				logger.info('No Review or Ratings found')
