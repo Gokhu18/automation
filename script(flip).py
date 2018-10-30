@@ -26,16 +26,16 @@ logger.info('Setting the date')
 dt = datetime.datetime.now().date()
 
 #inserting the values into db
-def inser(bar,model,price):
+def inser(bar,model,price,rating,review):
 	logger.info('Handling insertion')
-	doc1 = ({'brand':bar,'model':model,str(dt):price})
+	doc1 = ({'brand':bar,'model':model,str(dt):{'price':price,'rating':rating,'review':review}})
 	logger.debug('storing: %s',list(doc1))
 	if(doc1 == None):
 		logger.info('No documents found')
 		col.insert_one(doc1)
 		logger.info('Inserting the doc1 into collection')
 	else:
-		db1.pricetracker.update_one({'model':model}, {"$set": {str(dt):price}},upsert = True)
+		db1.pricetracker.update_one({'model':model}, {"$set": {str(dt):{'price':price,'rating':rating,'review':review}}},upsert = True)
 		logger.info('Updating the database')
 	print("Insert Complete")
 	logger.info('Insertion Done')
@@ -62,12 +62,22 @@ def main():
 			price = price.replace('Price: Not Available','0')
 			logger.info('fetching price %s',price)
 			logger.info('getting the price through xpaths')
-			inser(bar,model,price)
+			try:
+				rating = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[1]').text
+				rating = rating.replace(' Ratings ','')
+				review = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[3]').text
+				review = review.replace(' Reviews','')
+				review = review.replace(' ','')
+				logger.info('fetching No. of Ratings and Reviews %s',rating,review)
+			except NoSuchElementException:
+				pass
+				print("No element found")
+				logger.info('No Review or Ratings found')
+			inser(bar,model,price,rating,review)
 			logger.info('Calling the inser Function')
 
 if __name__ == '__main__':
 	main()
-
 driver.quit()
 logger.info('Quiting webpages')
 print("Completed")
