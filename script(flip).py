@@ -60,7 +60,7 @@ def main():
 			logger.info('Iterating the webpages')
 			price = str((driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[3 or 4]/div[1]/div/div[1]')).text)
 			price = price.replace('Price: Not Available','0')
-			logger.debug('fetching price %s',price)
+			logger.info('fetching price %s',price)
 			logger.info('getting the price through xpaths')
 			inser(bar,model,price)
 			logger.info('Calling the inser Function')
