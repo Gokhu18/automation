@@ -16,16 +16,16 @@ collection = db['TV']
 #calling the webdriver
 driver = webdriver.Chrome()
 #initializing different db
-db1 = client['price']
+db1 = client['price2']
 col = db1['TV']
 dt = datetime.datetime.now().date()
 #inserting the values into db
 def inser(bar,model,price,review,rating):
-	doc1 = ({'brand':bar,'model':model,str(dt):price})
+	doc1 = ({'brand':bar,'model':model,str(dt):{'price':price,'rating':rating,'review':review}})
 	if(doc1 == None):
 		col.insert_one(doc1)
 	else:
-		db1.TV.update_one({'model':model}, {"$set": {str(dt):price}},upsert = True)
+		db1.TV.update_one({'model':model}, {"$set": {str(dt):{'price':price,'rating':rating,'review':review}}},upsert = True)
 	print("Insert Complete")
 #defining main function
 def main():
@@ -46,11 +46,12 @@ def main():
 				rating = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[1]').text
 				rating = rating.replace(' Ratings ','')
 				review = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[3]').text
-				review = review.replace('Reviews','')
+				review = review.replace(' Reviews','')
+				review = review.replace(' ','')
 			except NoSuchElementException:
+				logger.error("No element found in main loop", exc_info=True)
 				pass
-				print("No element found")
-				
+				print("No element found")	
 			print(review)
 			print(rating)
 			inser(bar,model,price,review,rating)
