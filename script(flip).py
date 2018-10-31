@@ -28,15 +28,10 @@ dt = datetime.datetime.now().date()
 #inserting the values into db
 def inser(bar,model,price,rating,review):
 	logger.info('Handling insertion')
-	doc1 = ({'brand':bar,'model':model,str(dt):{'price':price,'rating':rating,'review':review}})
-	logger.debug('storing: %s',list(doc1))
-	if(doc1 == None):
-		logger.info('No documents found')
-		col.insert_one(doc1)
-		logger.info('Inserting the doc1 into collection')
-	else:
-		db1.pricetracker.update_one({'model':model}, {"$set": {str(dt):{'price':price,'rating':rating,'review':review}}},upsert = True)
-		logger.info('Updating the database')
+	({'brand':bar,'model':model,str(dt):{'price':price,'rating':rating,'review':review}})
+	logger.info('Inserting the doc1 into collection')
+	db1.pricetracker.update_one({'brand':bar,'model':model}, {"$set": {str(dt):{'price':price,'rating':rating,'review':review}}},upsert = True)
+	logger.info('Updating the database')
 	print("Insert Complete")
 	logger.info('Insertion Done')
 #defining main function
@@ -63,12 +58,19 @@ def main():
 			logger.info('fetching price %s',price)
 			logger.info('getting the price through xpaths')
 			try:
-				rating = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[1]').text
-				rating = rating.replace(' Ratings ','')
-				review = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[3]').text
-				review = review.replace(' Reviews','')
-				review = review.replace(' ','')
-				logger.info('fetching No. of Ratings and Reviews %s',rating,review)
+				rating = 0
+				review = 0
+				if(rating == 0 and 
+					review == 0):
+					rating = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[1]').text
+					rating = rating.replace(' Ratings ','')
+					review = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[3]').text
+					review = review.replace(' Reviews','')
+					review = review.replace(' ','')
+				else:
+					rating = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/span[1]')
+					review = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/span[1]')
+					logger.info('fetching No. of Ratings and Reviews %s',rating,review)
 			except NoSuchElementException:
 				logger.error("No review found in main loop", exc_info=True)
 				pass
