@@ -40,7 +40,7 @@ def main():
 			print("NO DATA")
 		else:
 			driver.get(result)
-			price = str((driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[3 or 4]/div[1]/div/div[1]')).text)
+			price = str((driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2 or 3]/div/div[3 or 4]/div[1]/div/div[1]')).text)
 			price = price.replace('Price: Not Available','0')
 			print(price)
 			try:
@@ -48,9 +48,9 @@ def main():
 				review = 0
 				if(rating == 0 and 
 					review == 0):
-					rating = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[1]').text
+					rating = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2 or 3]/div/div[2]/div/div/span[2]/span/span[1]').text
 					rating = rating.replace(' Ratings ','')
-					review = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]/div/div[2]/div/div/span[2]/span/span[3]').text
+					review = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2 or 3]/div/div[2]/div/div/span[2]/span/span[3]').text
 					review = review.replace(' Reviews','')
 					review = review.replace(' ','')
 				else:
