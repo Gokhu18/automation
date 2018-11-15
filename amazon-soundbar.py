@@ -38,8 +38,11 @@ def main():
 			print("NO DATA")
 		else:
 			driver.get(result)
-			review1 = driver.find_element_by_xpath('//*[@id="customer_review-R3S2QO6KQ1W93I"]/div[4]/span/div/div[1]')
-			print(review1)
+			# use class instead of xpaths
+			rs = driver.find_elements_by_class_name('review-text')
+			for r in rs:
+				print(r)
+			# print(review1)
 			try:
 				price = str((driver.find_element_by_xpath('//*[@id="priceblock_ourprice" or @id="priceblock_saleprice" or @id="priceblock_dealprice"]')).text)
 				price = price.replace('   ','')	
